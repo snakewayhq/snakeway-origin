@@ -2,7 +2,7 @@
 
 # Update dependencies.
 update:
-    go get -u
+    go get -u ./...
     go mod tidy -v
 
 generate-proto:
