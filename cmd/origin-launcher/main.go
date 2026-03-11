@@ -7,16 +7,23 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"strconv"
 	"syscall"
 	"time"
 )
 
 func main() {
 	const (
-		basePort = 4000
-		count    = 5
-		binary   = "origin-server"
+		count  = 5
+		binary = "origin-server"
 	)
+
+	basePort := 4000
+	if v := os.Getenv("ORIGIN_BASE_PORT"); v != "" {
+		if p, err := strconv.Atoi(v); err == nil {
+			basePort = p
+		}
+	}
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
