@@ -12,18 +12,29 @@ import (
 	"time"
 )
 
-func main() {
-	const (
-		count  = 5
-		binary = "origin-server"
-	)
+func envOrDefault(key, def string) string {
+	if v := os.Getenv(key); v != "" {
+		return v
+	}
+	return def
+}
 
-	basePort := 4000
-	if v := os.Getenv("ORIGIN_BASE_PORT"); v != "" {
-		if p, err := strconv.Atoi(v); err == nil {
-			basePort = p
+func envInt(key string, def int) int {
+	if v := os.Getenv(key); v != "" {
+		if n, err := strconv.Atoi(v); err == nil {
+			return n
 		}
 	}
+	return def
+}
+
+func main() {
+	const binary = "origin-server"
+
+	count := envInt("ORIGIN_COUNT", 5)
+	basePort := envInt("ORIGIN_BASE_PORT", 4000)
+	tlsCert := envOrDefault("TLS_CERT", "/certs/server.pem")
+	tlsKey := envOrDefault("TLS_KEY", "/certs/server.key")
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
@@ -38,8 +49,8 @@ func main() {
 			binary,
 			"-instance-id", fmt.Sprint(i),
 			"-port", fmt.Sprint(port),
-			"-tls-cert", "/certs/server.pem",
-			"-tls-key", "/certs/server.key",
+			"-tls-cert", tlsCert,
+			"-tls-key", tlsKey,
 		)
 
 		cmd.Stdout = os.Stdout
