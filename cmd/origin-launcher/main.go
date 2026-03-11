@@ -13,9 +13,9 @@ import (
 
 func main() {
 	const (
-		basePort = 3000
+		basePort = 4000
 		count    = 5
-		binary   = "./origin-server"
+		binary   = "origin-server"
 	)
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
@@ -31,8 +31,8 @@ func main() {
 			binary,
 			"-instance-id", fmt.Sprint(i),
 			"-port", fmt.Sprint(port),
-			"-tls-cert", "../integration-tests/certs/server.pem",
-			"-tls-key", "../integration-tests/certs/server.key",
+			"-tls-cert", "/certs/server.pem",
+			"-tls-key", "/certs/server.key",
 		)
 
 		cmd.Stdout = os.Stdout
