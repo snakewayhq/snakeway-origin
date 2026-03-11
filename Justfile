@@ -33,7 +33,7 @@ docker-run: docker-build
         -e ORIGIN_BASE_PORT=4000 \
         -e TLS_CERT=/certs/server.pem \
         -e TLS_KEY=/certs/server.key \
-        -v ../snakeway/integration-tests/certs:/certs:ro \
+        -v ../snakeway/tests/integration/certs:/certs:ro \
         -p 4000-4004:4000-4004 \
         -p 4443-4447:4443-4447 \
         -p 6051-6055:6051-6055 \
