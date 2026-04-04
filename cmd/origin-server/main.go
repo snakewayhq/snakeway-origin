@@ -24,6 +24,7 @@ func main() {
 	cfg := server.LoadConfig()
 
 	flag.IntVar(&cfg.InstanceId, "instance-id", 0, "Instance ID")
+	flag.StringVar(&cfg.Host, "host", cfg.Host, "Origin Host")
 	flag.IntVar(&cfg.Port, "port", cfg.Port, "Base port")
 	flag.StringVar(&cfg.CertFile, "tls-cert", cfg.CertFile, "TLS cert file")
 	flag.StringVar(&cfg.KeyFile, "tls-key", cfg.KeyFile, "TLS key file")
@@ -51,7 +52,7 @@ func main() {
 	// -------------------------------------------------------------------------
 	// HTTP over TCP
 	// -------------------------------------------------------------------------
-	httpAddr := fmt.Sprintf(":%d", cfg.Port)
+	httpAddr := fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)
 	httpSrvTCP := &http.Server{
 		Addr:    httpAddr,
 		Handler: handler,
@@ -67,7 +68,7 @@ func main() {
 	// -------------------------------------------------------------------------
 	// HTTPS over TCP (TLS + h2)
 	// -------------------------------------------------------------------------
-	httpsAddr := fmt.Sprintf(":%d", cfg.Port+443)
+	httpsAddr := fmt.Sprintf("%s:%d", cfg.Host, cfg.Port+443)
 	httpsSrvTCP := &http.Server{
 		Addr:      httpsAddr,
 		Handler:   handler,
@@ -141,7 +142,7 @@ func main() {
 	// -------------------------------------------------------------------------
 	// gRPC over TCP (TLS, h2)
 	// -------------------------------------------------------------------------
-	grpcAddr := fmt.Sprintf(":%d", cfg.Port+2051)
+	grpcAddr := fmt.Sprintf("%s:%d", cfg.Host, cfg.Port+2051)
 	grpcLis, err := net.Listen("tcp", grpcAddr)
 	if err != nil {
 		log.Fatalf("failed to listen on %s: %v", grpcAddr, err)

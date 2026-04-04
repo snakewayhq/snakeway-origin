@@ -7,6 +7,7 @@ import (
 )
 
 type Config struct {
+	Host       string
 	Port       int
 	CertFile   string
 	KeyFile    string
@@ -15,6 +16,7 @@ type Config struct {
 
 func LoadConfig() Config {
 	return Config{
+		Host:       getenvStr("ORIGIN_HOST", "0.0.0.0"),
 		Port:       getenvInt("PORT", 3000),
 		CertFile:   getenvStr("TLS_CERT_FILE", "./data/certs/server.pem"),
 		KeyFile:    getenvStr("TLS_KEY_FILE", "./data/certs/server.key"),

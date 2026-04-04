@@ -30,6 +30,7 @@ docker-build:
 docker-run: docker-build
     docker run \
         --rm \
+        -e ORIGIN_HOST=0.0.0.0 \
         -e ORIGIN_BASE_PORT=4000 \
         -e TLS_CERT=/certs/server.pem \
         -e TLS_KEY=/certs/server.key \

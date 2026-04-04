@@ -32,6 +32,7 @@ func main() {
 	const binary = "origin-server"
 
 	count := envInt("ORIGIN_COUNT", 5)
+	host := envOrDefault("ORIGIN_HOST", "127.0.0.1")
 	basePort := envInt("ORIGIN_BASE_PORT", 4000)
 	tlsCert := envOrDefault("TLS_CERT", "/certs/server.pem")
 	tlsKey := envOrDefault("TLS_KEY", "/certs/server.key")
@@ -48,6 +49,7 @@ func main() {
 			ctx,
 			binary,
 			"-instance-id", fmt.Sprint(i),
+			"-host", host,
 			"-port", fmt.Sprint(port),
 			"-tls-cert", tlsCert,
 			"-tls-key", tlsKey,
